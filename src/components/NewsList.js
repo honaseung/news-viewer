@@ -16,16 +16,16 @@ const NewsListBlock = styled.div`
     }
 `;
 
-const sample = [
-    {
-        title: '제목',
-        url: 'https://google.com',
-        urlToImage: 'https://via.placeholder.com/160',
-        description: '내용',
-    },
-];
+// const sample = [
+//     {
+//         title: '제목',
+//         url: 'https://google.com',
+//         urlToImage: 'https://via.placeholder.com/160',
+//         description: '내용',
+//     },
+// ];
 
-const NewsList = () => {
+const NewsList = ({ category }) => {
     const [articles, setArticles] = useState(null);
     const [loding, setLoading] = useState(false);
 
@@ -33,8 +33,9 @@ const NewsList = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
+                const query = category === 'all' ? '' : `&category=${category}`;
                 const response = await axios.get(
-                    'https://newsapi.org/v2/top-headlines?country=kr&apiKey=f61996914f2a4a48871e35246aab8eed',
+                    `https://newsapi.org/v2/top-headlines?country=kr${query}&apiKey=f61996914f2a4a48871e35246aab8eed`,
                 );
                 setArticles(response.data.articles);
             } catch (e) {
@@ -43,7 +44,7 @@ const NewsList = () => {
             setLoading(false);
         };
         fetchData();
-    }, []);
+    }, [category]);
 
     if (loding) {
         return <NewsListBlock>로딩 중...</NewsListBlock>;
